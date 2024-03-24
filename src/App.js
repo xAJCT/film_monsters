@@ -1,23 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import Menu from './Menu.js';
+import Monster from './Monster.js';
+import { useState, useEffect } from 'react';
 
-function App() {
+// Fetch data from supplied URL
+function fetchData()
+{
+  return fetch("https://tuhakarainab.github.io/content_hosting/monsters.json")
+    .then(response => response.json())
+}
+
+function App()
+{
+
+  const [monsters, setMonsters] = useState([]);
+  const [selectedMonster, setSelectedMonster] = useState(null);
+
+  useEffect(
+    () =>
+    {
+      fetchData().then(data => setMonsters(data))
+    }, []
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app-container'>
+      <Menu monsters={monsters} onSelect={setSelectedMonster} />
+      <h1>Film Monster React Appplication</h1>
+      {selectedMonster && <Monster selectedMonster={selectedMonster} />}
     </div>
   );
 }
